@@ -1,11 +1,7 @@
 package com.prosigmaka.backendjobapplication.entity.biodata;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.prosigmaka.backendjobapplication.entity.user.UserEntity;
-import com.prosigmaka.backendjobapplication.helper.enumerators.BersediaPenempatan;
-import com.prosigmaka.backendjobapplication.helper.enumerators.GolDarah;
-import com.prosigmaka.backendjobapplication.helper.enumerators.JenisKelamin;
 import com.prosigmaka.backendjobapplication.model.biodata.BiodataResponseModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "biodataId")
+@Table(name = "biodata")
 public class BiodataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,14 +36,12 @@ public class BiodataEntity {
     private String tempatLahir;
     @Column(name = "tanggal_lahir", nullable = false)
     private Date tanggalLahir;
-    @Enumerated(EnumType.STRING)
     @Column(name = "jenis_kelamin", nullable = false)
-    private JenisKelamin jenisKelamin;
+    private String jenisKelamin;
     @Column(name = "agama", nullable = false)
     private String agama;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gol_dara", nullable = false)
-    private GolDarah golDarah;
+    @Column(name = "gol_darah", nullable = false)
+    private String golDarah;
     @Column(name = "status_perkawinan", nullable = false)
     private String statusPerkawinan;
     @Column(name = "alamat_ktp", nullable = false)
@@ -60,9 +54,10 @@ public class BiodataEntity {
     private String telp;
     @Column(name = "kontak_darurat",nullable = false)
     private String kontakDarurat;
-    @Enumerated(EnumType.STRING)
+    @Column(name = "skill", nullable = false)
+    private String skill;
     @Column(name = "bersedia_ditempatkan", nullable = false)
-    private BersediaPenempatan bersediaPenempatan;
+    private String bersediaPenempatan;
     @Column(name = "penghasilan_min", nullable = false)
     private Double penghasilanMin;
     @Column(name = "tanggal_biodata", nullable = false)
@@ -93,6 +88,7 @@ public class BiodataEntity {
         biodata.setEmail(email);
         biodata.setTelp(telp);
         biodata.setKontakDarurat(kontakDarurat);
+        biodata.setSkill(skill);
         biodata.setBersediaPenempatan(bersediaPenempatan);
         biodata.setPenghasilanMin(penghasilanMin);
         biodata.setTanggalBiodata(new Date(System.currentTimeMillis()));

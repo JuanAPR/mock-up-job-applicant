@@ -1,9 +1,6 @@
 package com.prosigmaka.backendjobapplication.model.biodata;
 
 import com.prosigmaka.backendjobapplication.entity.biodata.BiodataEntity;
-import com.prosigmaka.backendjobapplication.helper.enumerators.BersediaPenempatan;
-import com.prosigmaka.backendjobapplication.helper.enumerators.GolDarah;
-import com.prosigmaka.backendjobapplication.helper.enumerators.JenisKelamin;
 import com.prosigmaka.backendjobapplication.model.pekerjaan.PekerjaanModel;
 import com.prosigmaka.backendjobapplication.model.pelatihan.PelatihanModel;
 import com.prosigmaka.backendjobapplication.model.pendidikan.PendidikanModel;
@@ -25,16 +22,17 @@ public class BiodataModel {
     private String ktp;
     private String tempatLahir;
     private Date tanggalLahir;
-    private JenisKelamin jenisKelamin;
+    private String jenisKelamin;
     private String agama;
-    private GolDarah golDarah;
+    private String golDarah;
     private String statusPerkawinan;
     private String alamatKtp;
     private String alamatTinggal;
     private String email;
     private String telp;
     private String kontakDarurat;
-    private BersediaPenempatan bersediaPenempatan;
+    private String skill;
+    private String bersediaPenempatan;
     private Double penghasilanMin;
     private Date tanggalBiodata;
     private List<PekerjaanModel> pekerjaanModel;
@@ -57,6 +55,7 @@ public class BiodataModel {
         biodata.setEmail(email);
         biodata.setTelp(telp);
         biodata.setKontakDarurat(kontakDarurat);
+        biodata.setSkill(skill);
         biodata.setBersediaPenempatan(bersediaPenempatan);
         biodata.setPenghasilanMin(penghasilanMin);
         biodata.setTanggalBiodata(new Date(System.currentTimeMillis()));

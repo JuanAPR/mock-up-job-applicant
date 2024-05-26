@@ -12,11 +12,14 @@ import com.prosigmaka.backendjobapplication.model.pekerjaan.PekerjaanModel;
 import com.prosigmaka.backendjobapplication.model.pelatihan.PelatihanModel;
 import com.prosigmaka.backendjobapplication.model.pendidikan.PendidikanModel;
 import com.prosigmaka.backendjobapplication.repository.*;
+import com.prosigmaka.backendjobapplication.service.auth.AuthService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,7 @@ public class BiodataService {
     private final PelatihanRepo pelatihanRepo;
     private final PekerjaanRepo pekerjaanRepo;
     private final UserRepo userRepo;
+    private final AuthService authService;
 
     //find all data and show them
     public GlobalHttpResponse<List<BiodataResponseModel>> findAllBio(){
@@ -39,17 +43,12 @@ public class BiodataService {
         }
         return new GlobalHttpResponse<>(200,"data retrieve success",biodataModel);
     }
-    //add new data
-//    public GlobalHttpResponse<BiodataResponseModel> addBiodata(BiodataModel biodataModel){
-//        BiodataEntity biodata = biodataRepo.save(biodataModel.dtoToEntity());
-//        return new GlobalHttpResponse<>(201,"Biodata saved",biodata.entityToDto());
-//    }
     //add new data, but with for loop for each List in Riwayat Pendidikan, Pelatihan dan Pekerjaan
     public GlobalHttpResponse<BiodataResponseModel> addBiodataFull (BiodataModel biodataModel){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
         UserEntity user = userRepo.findByEmail(currentPrincipalName).orElseThrow(() -> new RuntimeException("User not found"));
-        Optional<BiodataEntity> existingBiodata = biodataRepo.findByUserId(user.getId());
+        Optional<BiodataEntity> existingBiodata = biodataRepo.findByUserId(user);
         if(existingBiodata.isPresent()){
             throw new IllegalStateException("User already has a biodataId");
         }
@@ -85,6 +84,37 @@ public class BiodataService {
         pelatihanRepo.saveAll(pelatihanEntity);
         pekerjaanRepo.saveAll(pekerjaanEntity);
         return new GlobalHttpResponse<>(201, "Success",null);
+    }
+
+    public GlobalHttpResponse<BiodataResponseModel> createBiodata(BiodataModel biodataModel, String token){
+        UserEntity userEntity = authService.getUserFromToken(token);
+        if(biodataRepo.findByUserId(userEntity).isPresent()){
+            throw new RuntimeException("User already has a biodata");
+        }
+        BiodataEntity biodata = BiodataEntity.builder()
+                .userId(userEntity)
+                .posisi(biodataModel.getPosisi())
+                .nama(biodataModel.getNama())
+                .ktp(biodataModel.getKtp())
+                .tempatLahir(biodataModel.getTempatLahir())
+                .tanggalLahir(biodataModel.getTanggalLahir())
+                .jenisKelamin(biodataModel.getJenisKelamin())
+                .agama(biodataModel.getAgama())
+                .golDarah(biodataModel.getGolDarah())
+                .statusPerkawinan(biodataModel.getStatusPerkawinan())
+                .alamatKtp(biodataModel.getAlamatKtp())
+                .alamatTinggal(biodataModel.getAlamatTinggal())
+                .email(biodataModel.getEmail())
+                .telp(biodataModel.getTelp())
+                .kontakDarurat(biodataModel.getKontakDarurat())
+                .skill(biodataModel.getSkill())
+                .bersediaPenempatan(biodataModel.getBersediaPenempatan())
+                .penghasilanMin(biodataModel.getPenghasilanMin())
+                .tanggalBiodata(new Date(System.currentTimeMillis()))
+                .build();
+
+        biodataRepo.save(biodata);
+        return new GlobalHttpResponse<>(201,"Success",biodata.entityToDto());
     }
 
     //update biodataId

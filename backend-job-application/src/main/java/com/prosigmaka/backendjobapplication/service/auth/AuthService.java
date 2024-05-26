@@ -57,4 +57,9 @@ public class AuthService {
                 .token(jwtToken)
                 .build();
     }
+
+    public UserEntity getUserFromToken(String token){
+        String email = jwtService.extractUseremail(token);
+        return userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
