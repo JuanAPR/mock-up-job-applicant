@@ -24,7 +24,7 @@ public class PendidikanEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "biodata_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
-    private BiodataEntity biodata;
+    private BiodataEntity biodataId;
     @Column(name = "jenjang_pendidikan", nullable = false)
     private String jenjangPendidikan;
     @Column(name = "nama_institusi", nullable = false)
@@ -38,7 +38,7 @@ public class PendidikanEntity {
 
     public PendidikanResponseModel entityToDto(){
         PendidikanResponseModel pendidikan = new PendidikanResponseModel();
-        pendidikan.setNama(biodata.getNama());
+        pendidikan.setNama(biodataId.getNama());
         pendidikan.setJenjangPendidikan(jenjangPendidikan);
         pendidikan.setNamaInstitusi(namaInstitusi);
         pendidikan.setJurusan(jurusan);

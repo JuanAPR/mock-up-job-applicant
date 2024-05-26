@@ -24,7 +24,7 @@ public class PelatihanEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "biodata_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
-    private BiodataEntity biodata;
+    private BiodataEntity biodataId;
     @Column(name = "nama_kursus")
     private String namaKursus;
     @Column(name = "sertifikat")
@@ -34,7 +34,7 @@ public class PelatihanEntity {
 
     public PelatihanResponseModel entityToDto(){
         PelatihanResponseModel pelatihan = new PelatihanResponseModel();
-        pelatihan.setNama(biodata.getNama());
+        pelatihan.setNama(biodataId.getNama());
         pelatihan.setNamaKursus(namaKursus);
         pelatihan.setSertifikat(sertifikat);
         pelatihan.setTahun(tahun);

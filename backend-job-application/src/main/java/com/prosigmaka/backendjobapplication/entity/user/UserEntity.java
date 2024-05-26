@@ -40,7 +40,6 @@ public class UserEntity implements UserDetails {
     @Enumerated
     private Role role;
     @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private BiodataEntity biodata;
 
     @Override
